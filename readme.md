@@ -7,14 +7,14 @@ auth to google:
   - click on the newly created service account and go to Keys tab
     - add a key - Create new key
     - JSON
-  - download the json key and encode it with base64, eg: cat key.json | base64
-  - add the b64 key to your .env and cloud env
+  - (OPTIONAL: download the json key and encode it with base64, eg: cat key.json | base64)
+  - add the key to your .env and cloud env
 
 creating a bucket:
   - name must be unique
   - location type: Region
-  - location: us-central1 (Iowa)
-  - default storage class: Standard
+  - location eg: us-central1 (Iowa)
+  - default storage class: Standard (for images), Nearline (for backups), ...
   - access control: Uniform (bucket level permissions)
 
 making the bucket publically available:

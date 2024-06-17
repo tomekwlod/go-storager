@@ -2,7 +2,6 @@ package google_storage
 
 import (
 	"context"
-	"encoding/base64"
 	"errors"
 	"fmt"
 	"io"
@@ -30,12 +29,16 @@ type GoogleStorage struct {
 }
 
 func new(ctx context.Context, b64JsonKey, bucketname string) error {
-	b, err := base64.StdEncoding.DecodeString(b64JsonKey)
-	if err != nil {
-		return err
-	}
+	// {
+	// // if for some reason you have to use JSON but base64 encoded you can use this solution:
+	// b, err := base64.StdEncoding.DecodeString(b64JsonKey)
+	// if err != nil {
+	// 	return err
+	// }
+	// client, err := gs.NewClient(ctx, option.WithCredentialsJSON(b))
+	// }
+	client, err := gs.NewClient(ctx, option.WithCredentialsJSON([]byte(b64JsonKey)))
 
-	client, err := gs.NewClient(ctx, option.WithCredentialsJSON(b))
 	if err != nil {
 		return err
 	}
@@ -64,6 +67,10 @@ func Get() (*GoogleStorage, error) {
 }
 
 func Setup(ctx context.Context, b64JsonKey, bucketname string) *GoogleStorage {
+	if b64JsonKey == "" || bucketname == "" {
+		panic("b64JsonKey and bucketname are required")
+	}
+
 	once.Do(func() {
 		err := new(ctx, b64JsonKey, bucketname)
 		if err != nil {
